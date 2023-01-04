@@ -1,5 +1,7 @@
 # Custom VM Sample Toolkit
 
+[![OSS Status: Sample][sample-badge]][sample-markdown]
+
 Welcome! Once upon a time I was tasked with using Azure VM Image Builder and Azure Compute Gallery to define, publish, and then use Custom VM templates in Azure. After reading the help documentation on these services, and following along with the tutorials, I wrote a set up bash scripts, and orchestrated them with some Make targets, that automated the workflow of setup and publishing of VM image templates in Azure. 
 
 This repository contains those scripts and the Makefile, and some notes on how they might be used to automate the Custom VM workflow. These scripts made my life a little easier, and they might be useful to others.
@@ -320,3 +322,6 @@ OSTYPE| The OS type used when publishing the image in Azure Compute Gallery. Can
 ## Finally
 
 Once an Image Version has been build it is possible to create VMs based upon that Image Version. This can be done within the portal, or via the Azure CLI.
+
+[sample-badge]: https://img.shields.io/badge/OSS%20Status-Sample-orange.svg
+[sample-markdown]: https://github.com/martinpeck/oss-project-status/blob/master/sample/OSS_STATUS.md
