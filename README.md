@@ -324,4 +324,4 @@ OSTYPE| The OS type used when publishing the image in Azure Compute Gallery. Can
 Once an Image Version has been build it is possible to create VMs based upon that Image Version. This can be done within the portal, or via the Azure CLI.
 
 [sample-badge]: https://img.shields.io/badge/OSS%20Status-Sample-orange.svg
-[sample-markdown]: https://github.com/martinpeck/oss-project-status/blob/master/sample/OSS_STATUS.md
+[sample-markdown]: OSS_STATUS.md
