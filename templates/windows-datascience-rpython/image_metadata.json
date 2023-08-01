@@ -1,0 +1,12 @@
+{
+    "IMAGE_DEFINITION_PREFIX": "imgdef-windows-dsvm-rpython",
+    "TEMPLATE_NAME_PREFIX": "imgtemplate-windows-dsvm-rpython",
+    "OFFER_PREFIX": "Windows_DSVM_RPython",
+    "PUBLISHER_NAME" : "MYORGNAME",
+    "SKU": "2019-Datacenter",
+    "OSTYPE": "Windows",
+    "IMAGE_TAGS" : "Tag1=Value1 Tag2=Value2",
+    "IMAGE_DESCRIPTION": "Windows DataScience VM with Python and R tooling",
+    "IMAGE_HYPERV_VERSION": "V1"
+}
+

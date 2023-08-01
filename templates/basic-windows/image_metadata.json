@@ -1,0 +1,12 @@
+{
+    "IMAGE_DEFINITION_PREFIX": "imgdef-windows11-basic",
+    "TEMPLATE_NAME_PREFIX": "imgtemplate-windows11-basic",
+    "OFFER_PREFIX": "Windows11_Basic",
+    "PUBLISHER_NAME" : "MYORGNAME",
+    "SKU": "Windows11Basic",
+    "OSTYPE": "Windows",
+    "IMAGE_TAGS" : "Tag1=Value1 Tag2=Value2",
+    "IMAGE_DESCRIPTION": "Windows 11 with no customisations",
+    "IMAGE_HYPERV_VERSION": "V2"
+}
+

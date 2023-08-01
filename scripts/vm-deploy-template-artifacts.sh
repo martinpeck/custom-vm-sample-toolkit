@@ -28,5 +28,5 @@ AZURE_STORAGE_SAS_TOKEN=$(az storage account generate-sas \
   --permissions dlrw -o tsv | sed 's/%3A/:/g;s/\"//g')
 
 # use AzCopy to copy the folder (passed as parameter to script) to the storage account's container
-INCLUDE_PATTERN="*.json;*.sh;*.ps1"
+INCLUDE_PATTERN="*.json;*.sh;*.ps1;*.pkla"
 azcopy cp "${1}/*" "https://$CVM_STORAGE_ACCOUNT.blob.core.windows.net/${CVM_CONTAINER_NAME}/?$AZURE_STORAGE_SAS_TOKEN" --recursive --include-pattern "${INCLUDE_PATTERN}"

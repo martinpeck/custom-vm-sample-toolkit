@@ -1,0 +1,11 @@
+{
+    "IMAGE_DEFINITION_PREFIX" : "SAMPLEBasicLinuxVM",
+    "TEMPLATE_NAME_PREFIX" : "SAMPLEBasicLinuxVM",
+    "OFFER_PREFIX" : "SAMPLEBasicLinuxVM",
+    "PUBLISHER_NAME" : "MYORGNAME",
+    "SKU" : "18.04-LTS",
+    "OSTYPE" : "Linux",
+    "IMAGE_TAGS" : "Tag1=Value1 Tag2=Value2",
+    "IMAGE_DESCRIPTION" : "Basic Linux VM Image",
+    "IMAGE_HYPERV_VERSION": "V1"    
+}

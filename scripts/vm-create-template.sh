@@ -63,7 +63,7 @@ fi
 SUBSCRIPTION_ID=$(az account show --query id --output tsv)
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-source "$DIR/load_metadata.sh" "$METADATA_URL"
+source "$DIR/load_metadata_from_json.sh" "$METADATA_URL"
 
 # copy template into build artifacts folder
 IMAGE_JSON_PATH="${DIR}/../build_artifacts/${CVM_TEMPLATE_NAME}.json"

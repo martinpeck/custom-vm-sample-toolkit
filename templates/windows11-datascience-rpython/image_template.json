@@ -1,0 +1,138 @@
+{
+  "type": "Microsoft.VirtualMachineImages/imageTemplates",
+  "apiVersion": "2020-02-14",
+  "location": "uksouth",
+  "dependsOn": [],
+  "tags": {
+      "imagebuilderTemplate": "win11dsvm",
+      "userIdentity": "enabled"
+          },
+      "identity": {
+          "type": "UserAssigned",
+                  "userAssignedIdentities": {
+                  "<imgBuilderId>": {}
+                }
+              },
+  "properties": {
+      "buildTimeoutInMinutes" : 180,
+
+      "vmProfile":
+          {
+          "vmSize": "Standard_DS2_v2",
+          "osDiskSizeGB": 127
+          },
+
+      "source": {
+          "type": "PlatformImage",
+              "publisher": "MicrosoftWindowsDesktop",
+              "offer": "windows-11",
+              "sku": "win11-21h2-pro",
+              "version": "latest"
+      },
+      "customize": [
+        {
+            "type": "PowerShell",
+            "name": "Install Baseline",
+            "runElevated": true,
+            "runAsSystem": true,
+            "scriptUri": "https://<scriptStorageAcc>.blob.core.windows.net/<scriptStorageAccContainer>/windows11-datascience-rpython/scripts/setup_build.ps1"
+        },
+        {
+            "type": "PowerShell",
+            "name": "Install Python",
+            "runElevated": true,
+            "runAsSystem": true,
+            "scriptUri": "https://<scriptStorageAcc>.blob.core.windows.net/<scriptStorageAccContainer>/windows11-datascience-rpython/scripts/add_python3.ps1"
+        },
+        {
+            "type": "PowerShell",
+            "name": "Install Anaconda",
+            "runElevated": true,
+            "runAsSystem": true,
+            "scriptUri": "https://<scriptStorageAcc>.blob.core.windows.net/<scriptStorageAccContainer>/windows11-datascience-rpython/scripts/add_anaconda.ps1"
+        },
+        {
+            "type": "PowerShell",
+            "name": "Install VSCode",
+            "runElevated": true,
+            "runAsSystem": true,
+            "scriptUri": "https://<scriptStorageAcc>.blob.core.windows.net/<scriptStorageAccContainer>/windows11-datascience-rpython/scripts/add_vscode.ps1"
+        },
+        {
+            "type": "PowerShell",
+            "name": "Install Git for Windows",
+            "runElevated": true,
+            "runAsSystem": true,
+            "scriptUri": "https://<scriptStorageAcc>.blob.core.windows.net/<scriptStorageAccContainer>/windows11-datascience-rpython/scripts/add_git.ps1"
+        },
+        {
+            "type": "PowerShell",
+            "name": "Install AzCopy",
+            "runElevated": true,
+            "runAsSystem": true,
+            "scriptUri": "https://<scriptStorageAcc>.blob.core.windows.net/<scriptStorageAccContainer>/windows11-datascience-rpython/scripts/add_azcopy.ps1"
+        },
+        {
+            "type": "PowerShell",
+            "name": "Install AzCLI",
+            "runElevated": true,
+            "runAsSystem": true,
+            "scriptUri": "https://<scriptStorageAcc>.blob.core.windows.net/<scriptStorageAccContainer>/windows11-datascience-rpython/scripts/add_azcli.ps1"
+        },
+        {
+            "type": "PowerShell",
+            "name": "Install SQL Server Management Studio",
+            "runElevated": true,
+            "runAsSystem": true,
+            "scriptUri": "https://<scriptStorageAcc>.blob.core.windows.net/<scriptStorageAccContainer>/windows11-datascience-rpython/scripts/add_ssms.ps1"
+        },
+        {
+            "type": "PowerShell",
+            "name": "Install Chrome",
+            "runElevated": true,
+            "runAsSystem": true,
+            "scriptUri": "https://<scriptStorageAcc>.blob.core.windows.net/<scriptStorageAccContainer>/windows11-datascience-rpython/scripts/add_chrome.ps1"
+        },
+        {
+            "type": "PowerShell",
+            "name": "Install FireFox",
+            "runElevated": true,
+            "runAsSystem": true,
+            "scriptUri": "https://<scriptStorageAcc>.blob.core.windows.net/<scriptStorageAccContainer>/windows11-datascience-rpython/scripts/add_firefox.ps1"
+        },
+        {
+            "type": "PowerShell",
+            "name": "Install Storage Explorer",
+            "runElevated": true,
+            "runAsSystem": true,
+            "scriptUri": "https://<scriptStorageAcc>.blob.core.windows.net/<scriptStorageAccContainer>/windows11-datascience-rpython/scripts/add_storage_explorer.ps1"
+        },
+        {
+            "type": "PowerShell",
+            "name": "Install R Tools",
+            "runElevated": true,
+            "runAsSystem": true,
+            "scriptUri": "https://<scriptStorageAcc>.blob.core.windows.net/<scriptStorageAccContainer>/windows11-datascience-rpython/scripts/add_r_toolset.ps1"
+        },
+        {
+            "type": "WindowsRestart",
+            "restartCommand": "shutdown /r /f /t 0",
+            "restartCheckCommand": "echo Azure-Image-Builder-Restarted-the-VM  > c:\\BuildArtifacts\\azureImageBuilderRestart.txt",
+            "restartTimeout": "5m"
+        }
+    ],
+      "distribute": [
+        {
+            "type": "SharedImage",
+            "galleryImageId": "/subscriptions/<subscriptionID>/resourceGroups/<rgName>/providers/Microsoft.Compute/galleries/<sharedImageGalName>/images/<imageDefName>",
+            "runOutputName": "<runOutputName>",
+            "artifactTags": {
+                "source": "azureVmImageBuilder",
+                "baseosimg": "windows11"
+            },
+            "replicationRegions":["uksouth"],
+            "storageAccountType": "Standard_LRS"
+        }
+      ]
+  }
+}

@@ -20,14 +20,41 @@ vm-view-role: ## views the custom role defintion
 vm-deploy-core: ## deploy core infra required for custom VMs (run once per environment)
 	. ./scripts/load_env.sh && ./scripts/vm-deploy-core.sh
 
-vm-define-basic-linux-image: ## create basic linux image definitions within Azure Compute Gallery
-	. ./scripts/load_env.sh && ./scripts/vm-define-images.sh ./templates/basic-linux/image_metadata.txt
+vm-destroy-core: ## destroy all custom VMs infrastructure
+	. ./scripts/load_env.sh && ./scripts/vm-destroy-core.sh
+	
+vm-show-metadata: ## load template metadata and print to screen (requires first argument of TEMPLATE_PATH=<path_to_template>)
+	. ./scripts/load_env.sh \
+	&& . ./scripts/load_metadata_from_json.sh $(TEMPLATE_PATH)/image_metadata.json \
+	&& . ./scripts/show_metadata.sh
+
+vm-define-image: ## create the specified image definition (requires first argument of TEMPLATE_PATH=<path_to_template>)
+	./scripts/check_template.sh $(TEMPLATE_PATH) \
+	&& . ./scripts/load_env.sh \
+	&& ./scripts/vm-define-images.sh $(TEMPLATE_PATH)/image_metadata.json
 
 vm-deploy-template-artifacts: ## copy VM templates and supporting scripts to storage in Azure (run when templates are updated)
 	. ./scripts/load_env.sh && ./scripts/vm-deploy-template-artifacts.sh ./templates
 
-vm-create-basic-linux-template: ## create the basic linux template in Azure (run once per template)
-	. ./scripts/load_env.sh && ./scripts/vm-create-template.sh --template-url ./templates/basic-linux/image_template.json --metadata-url ./templates/basic-linux/image_metadata.txt
+vm-create-image-template: ## create the specified image template in Azure (requires first argument of TEMPLATE_PATH=<path_to_template>)
+	./scripts/check_template.sh $(TEMPLATE_PATH) \
+	&& . ./scripts/load_env.sh \
+	&& ./scripts/vm-create-template.sh --template-url $(TEMPLATE_PATH)/image_template.json --metadata-url $(TEMPLATE_PATH)/image_metadata.json
 
-vm-build-basic-linux-image: ## builds the basic Linux VM image
-	. ./scripts/load_env.sh && ./scripts/vm-build-image.sh --metadata-url ./templates/basic-linux/image_metadata.txt
+vm-build-image: ## builds specified VM image (requires first argument of TEMPLATE_PATH=<path_to_template>)
+	./scripts/check_template.sh $(TEMPLATE_PATH) \
+	&& . ./scripts/load_env.sh \
+	&& ./scripts/vm-build-image.sh --metadata-url $(TEMPLATE_PATH)/image_metadata.json
+
+vm-delete-image-template: ## delete the specified image template in Azure (requires first argument of TEMPLATE_PATH=<path_to_template>)
+	./scripts/check_template.sh $(TEMPLATE_PATH) \
+	&& . ./scripts/load_env.sh \
+	&& ./scripts/vm-delete-template.sh --metadata-url $(TEMPLATE_PATH)/image_metadata.json
+
+vm-update-image: ## update the specified image template in Azure (requires first argument of TEMPLATE_PATH=<path_to_template>)
+	./scripts/check_template.sh $(TEMPLATE_PATH) \
+	&& . ./scripts/load_env.sh \
+	&& ./scripts/vm-delete-template.sh --metadata-url $(TEMPLATE_PATH)/image_metadata.json \
+	&& ./scripts/vm-deploy-template-artifacts.sh ./templates \
+	&& ./scripts/vm-create-template.sh --template-url $(TEMPLATE_PATH)/image_template.json --metadata-url $(TEMPLATE_PATH)/image_metadata.json \
+	&& ./scripts/vm-build-image.sh --metadata-url $(TEMPLATE_PATH)/image_metadata.json

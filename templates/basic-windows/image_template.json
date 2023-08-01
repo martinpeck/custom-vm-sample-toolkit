@@ -1,0 +1,46 @@
+{
+  "type": "Microsoft.VirtualMachineImages/imageTemplates",
+  "apiVersion": "2020-02-14",
+  "location": "uksouth",
+  "dependsOn": [],
+  "tags": {
+      "imagebuilderTemplate": "basic-windows",
+      "userIdentity": "enabled"
+          },
+      "identity": {
+          "type": "UserAssigned",
+                  "userAssignedIdentities": {
+                  "<imgBuilderId>": {}
+                }
+              },
+  "properties": {
+      "buildTimeoutInMinutes" : 120,
+
+      "vmProfile":
+          {
+          "vmSize": "Standard_DS2_v2",
+          "osDiskSizeGB": 127
+          },
+
+      "source": {
+          "type": "PlatformImage",
+              "publisher": "MicrosoftWindowsDesktop",
+              "offer": "windows-11",
+              "sku": "win11-21h2-pro",
+              "version": "latest"
+      },
+      "distribute": [   
+        {
+            "type": "SharedImage",
+            "galleryImageId": "/subscriptions/<subscriptionID>/resourceGroups/<rgName>/providers/Microsoft.Compute/galleries/<sharedImageGalName>/images/<imageDefName>",
+            "runOutputName": "<runOutputName>",
+            "artifactTags": {
+                "source": "azureVmImageBuilder",
+                "baseosimg": "windows11"
+            },
+            "replicationRegions":["uksouth"],
+            "storageAccountType": "Standard_LRS"
+        }
+      ]
+  }
+}

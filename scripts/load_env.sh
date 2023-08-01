@@ -14,5 +14,5 @@ echo "Environment set: $ENVIRONMENT_NAME"
 # Pull in variables dependent on the envionment we are deploying to.
 if [ -f "$ENV_DIR/environments/$ENVIRONMENT_NAME.env" ]; then
     echo "Loading environment variables for $ENVIRONMENT_NAME"
-    source "$ENV_DIR/environments/$ENVIRONMENT_NAME.env"
+    . "$ENV_DIR/environments/$ENVIRONMENT_NAME.env"
 fi

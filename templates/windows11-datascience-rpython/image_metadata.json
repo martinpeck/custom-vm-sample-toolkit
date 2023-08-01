@@ -1,0 +1,12 @@
+{
+    "IMAGE_DEFINITION_PREFIX": "imgdef-windows11-dsvm-rpython",
+    "TEMPLATE_NAME_PREFIX": "imgtemplate-windows11-dsvm-rpython",
+    "OFFER_PREFIX": "Windows11_DSVM_RPython",
+    "PUBLISHER_NAME" : "MYORGNAME",
+    "SKU": "Windows11",
+    "OSTYPE": "Windows",
+    "IMAGE_TAGS" : "Tag1=Value1 Tag2=Value2",
+    "IMAGE_DESCRIPTION": "Windows 11 DataScience VM with Python and R tooling",
+    "IMAGE_HYPERV_VERSION": "V2"
+}
+
