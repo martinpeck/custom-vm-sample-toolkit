@@ -120,15 +120,19 @@ The `Makefile` has the following help text, which you can see if you run `make h
 ``` bash
 $ make help
 
-help                            Show this help
-vm-show-env                     show the environment variables associated with custom VM images
-vm-create-role                  creates the custom role defintion (run once per subscription)
-vm-view-role                    views the custom role defintion
-vm-deploy-core                  deploy core infra required for custom VMs (run once per environment)
-vm-define-basic-linux-image     create basic linux image definitions within Azure Compute Gallery
-vm-deploy-template-artifacts    copy VM templates and supporting scripts to storage in Azure (run when templates are updated)
-vm-create-basic-linux-template  create the basic linux template in Azure (run once per template)
-vm-build-basic-linux-image      builds the basic Linux VM image
+help                          Show this help
+vm-show-env                   show the environment variables associated with custom VM images
+vm-create-role                creates the custom role defintion (run once per subscription)
+vm-view-role                  views the custom role defintion
+vm-deploy-core                deploy core infra required for custom VMs (run once per environment)
+vm-destroy-core               destroy all custom VMs infrastructure
+vm-show-metadata              load template metadata and print to screen (requires first argument of TEMPLATE_PATH=<path_to_template>)
+vm-define-image               create the specified image definition (requires first argument of TEMPLATE_PATH=<path_to_template>)
+vm-deploy-template-artifacts  copy VM templates and supporting scripts to storage in Azure (run when templates are updated)
+vm-create-image-template      create the specified image template in Azure (requires first argument of TEMPLATE_PATH=<path_to_template>)
+vm-build-image                builds specified VM image (requires first argument of TEMPLATE_PATH=<path_to_template>)
+vm-delete-image-template      delete the specified image template in Azure (requires first argument of TEMPLATE_PATH=<path_to_template>)
+vm-update-image               update the specified image template in Azure (requires first argument of TEMPLATE_PATH=<path_to_template>)
 ```
 
 > Note: The dev container has bash completion for `make` set up so you can type `make vm-c` and then hit `TAB` to complete this command, or to list the possible options that match.
@@ -147,35 +151,12 @@ Before running the `Makefile` targets you need to define environment variables f
 
 For a developer, in a local development loop (e.g. editing the customisation scripts, and testing they work) you will want to take a copy of `scripts\environments\local.env.example` and save it into the same folder as `local.env`. Then, edit this file to set values for each of the environment variables that does not otherwise have a value already set.
 
-The following is an example of how your `local.env` might look once populated with values:
-
-``` bash
-# Environment (used in naming of image definitions)
-# Suggestion: replace Test01 with your email alias or something unique to you
-#             e.g. Bob01
-export CVM_ENVIRONMENT_SUFFIX=Test01
-
-# Resource group and location of Azure Compute Gallery
-export CVM_RESOURCE_GROUP=sample-customvm01
-export CVM_LOCATION=uksouth
-export CVM_GALLERY_NAME=sample_gallery_01
-
-# Storage Account for VM Image Templates
-export CVM_STORAGE_ACCOUNT=samplecmvmsto01
-export CVM_CONTAINER_NAME=custom-vm-assets
-
-# Managed Identity
-export CVM_IMAGE_BUILDER_ID_NAME=sampleimgbldID01
-
-# Custom Role Definition
-export CVM_IMAGE_BUILDER_ROLE_NAME="Azure Image Builder Service Image Creation Role (Dev)"
-```
 
 The `CVM_ENVIRONMENT_SUFFIX` variable is worth calling out. This prevents you from name-clashing with the Development and Production infrastructure. This suffix is added to the end of the name for Azure resources. You should define a `CVM_ENVIRONMENT_SUFFIX` value that is unique to you. This will then be appended to the image template names, offer names, and image defintion names that you generate. 
 
 ### Named Environments
 
-Within the `vm-images/scripts/environments` folder you will see named environment .env files:
+Within the `vm-images/scripts/environments` folder you can create environment .env files. For example, you might create the following:
 
 | file               | description |
 | ----               | ------------|
@@ -287,28 +268,21 @@ The following link contains a reference for these files: https://learn.microsoft
 
 Optionally, each folder also contains a `scripts` subfolder, and one or more scripts (Bash, Powershell, or otherwise). These scripts are referenced by the `image_template.json` file, and are accessed and run during the Azure Image Builder steps. 
 
-Finally, each folder contains an `image_metadata.txt`. This file contains name/value pairs that are used by the Custom VM scripts. It is important that each folder contains one of these metadata files, and that the file follows the same format as follows:
+Finally, each folder contains an `image_metadata.json`. This file contains name/value pairs that are used by the Custom VM scripts. It is important that each folder contains one of these metadata files, and that the file follows the same format as this sample:
 
-``` ini
-IMAGE_DEFINITION_PREFIX=IMAGE_DEFINITION_PREFIX_HERE
-TEMPLATE_NAME_PREFIX=TEMPLATE_NAME_PREFIX_HERE
-OFFER_PREFIX=OFFER_PREFIX_HERE
-PUBLISHER_NAME=PUBLISHER_NAME_HERE
-SKU=SKU_HERE
-OSTYPE=OSTYPE_HERE
+``` json
+{
+    "IMAGE_DEFINITION_PREFIX" : "SAMPLEBasicLinuxVM",
+    "TEMPLATE_NAME_PREFIX" : "SAMPLEBasicLinuxVM",
+    "OFFER_PREFIX" : "SAMPLEBasicLinuxVM",
+    "PUBLISHER_NAME" : "MYORGNAME",
+    "SKU" : "18.04-LTS",
+    "OSTYPE" : "Linux",
+    "IMAGE_TAGS" : "Tag1=Value1 Tag2=Value2",
+    "IMAGE_DESCRIPTION" : "Basic Linux VM Image",
+    "IMAGE_HYPERV_VERSION": "V1"    
+}
 ```
-
-For example:
-
-```ini
-IMAGE_DEFINITION_PREFIX=SAMPLEBasicLinuxImage
-TEMPLATE_NAME_PREFIX=SAMPLEBasicLinuxVM
-OFFER_PREFIX=SAMPLEBasicLinuxVM
-PUBLISHER_NAME=SAMPLE
-SKU=18.04-LTS
-OSTYPE=Linux
-```
-
 
 Property | Usage | 
 ---|---
@@ -318,6 +292,9 @@ OFFER_PREFIX| SAMPLEBasicLinuxVM
 PUBLISHER_NAME| The publisher name used when publishing the image in Azure Compute Gallery. e.g. `SAMPLE`
 SKU| The SKU used when publishing the image in Azure Compute Gallery. e.g. `18.04-LTS`
 OSTYPE| The OS type used when publishing the image in Azure Compute Gallery. Can be either `Linux` or `Windows`
+IMAGE_TAGS| Tags that will get applied to the deployed Azure resources associated with this VM template
+IMAGE_DESCRIPTION| A description for the VM image
+IMAGE_HYPERV_VERSION| The version of Hyper-V for this VM image
 
 ## Finally
 
