@@ -208,7 +208,7 @@ An image defintion, within Azure Compute Gallery, is essentially like a catalog 
 There is a make target for each image definition. At this point, there is only one image definition but you should create additional make targets as you add more image defintions:
 
 ```
-make vm-define-basic-linux-image
+make vm-define-image TEMPLATE_PATH=templates/basic-linux
 ```
 
 Use these targets to create the image definitions for the your VM image defintions within your Azure Compute Gallery. This **only needs to be run once**
@@ -226,7 +226,7 @@ An Image Template is generated from the `image_template.json` files within this 
 There is a make target for each image template. At this point, there is only one image definition but you should create additional make targets as you add more image templates:
 
 ```
-make vm-create-basic-linux-template
+make vm-create-image-template TEMPLATE_PATH=templates/basic-linux
 ```
 
 You should run these targets if you need to change your image templates in some way.
@@ -238,7 +238,7 @@ Finally, an Image Version is build by running the Image Template. This causes Im
 There is a make target for each image version. At this point, there is only one image definition but you should create additional make targets as you add more image versions:
 
 ```
-make vm-build-basic-linux-image
+make vm-build-image TEMPLATE_PATH=templates/basic-linux
 ```
 
 You should run these targets each time you want to generate a new Image Version. This might include building new versions to capture changes in the base OS image (e.g. patches), or capturing any changes in the customization scripts.
